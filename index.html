@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delta Spoofer - License System</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a12;
+            color: #00ffaa;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            background: #1a1a2e;
+            color: #00ffaa;
+            border: 1px solid #00ffaa;
+        }
+        .admin-panel {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #00ffaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DELTA SPOOFER</h1>
+        <h3>License Management System</h3>
+        
+        <div id="user-section">
+            <h4>Check License</h4>
+            <input type="text" id="licenseKey" placeholder="Enter license key">
+            <button onclick="checkLicense()">Verify</button>
+            <p id="result"></p>
+        </div>
+        
+        <div class="admin-panel" id="adminSection">
+            <h4>Admin Panel</h4>
+            <button onclick="generateKey()">Generate New Key</button>
+            <div id="newKeyDisplay"></div>
+        </div>
+    </div>
+
+    <script>
+        // Simple license check
+        async function checkLicense() {
+            const key = document.getElementById('licenseKey').value;
+            const response = await fetch('LICENSE-DB.json');
+            const licenses = await response.json();
+            
+            const isValid = licenses.some(l => l.key === key && l.active);
+            document.getElementById('result').innerText = 
+                isValid ? '✅ Valid License' : '❌ Invalid License';
+        }
+
+        // Admin function (requires GitHub API token)
+        async function generateKey() {
+            const prefix = "DELTA";
+            const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const newKey = `${prefix}-${randomPart}`;
+            
+            document.getElementById('newKeyDisplay').innerText = `New Key: ${newKey}`;
+            
+            // Note: In production, you would save this to LICENSE-DB.json
+            // via GitHub API or server-side code
+            alert("In a real implementation, this would save to your database");
+        }
+    </script>
+</body>
+</html>
